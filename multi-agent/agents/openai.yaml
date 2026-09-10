@@ -1,0 +1,4 @@
+interface:
+  display_name: "多 Agent 编排器"
+  short_description: "按能力拆分、路由、审查并验证复杂任务"
+  default_prompt: "使用 $multi-agent 规划并执行此任务，只在确有价值时委派子 Agent。"
