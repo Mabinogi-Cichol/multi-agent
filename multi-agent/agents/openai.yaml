@@ -1,4 +1,6 @@
 interface:
   display_name: "多 Agent 编排器"
-  short_description: "按能力拆分、路由、审查并验证复杂任务"
-  default_prompt: "使用 $multi-agent 规划并执行此任务，只在确有价值时委派子 Agent。"
+  short_description: "并行拆分复杂仓库任务并公开模型路由与预算边界"
+  default_prompt: "使用 $multi-agent 规划并执行此复杂仓库任务，委派前说明每个子 Agent 的模型、推理强度和任务边界。"
+policy:
+  allow_implicit_invocation: true

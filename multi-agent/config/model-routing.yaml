@@ -1,0 +1,54 @@
+version: 1
+
+# 修改此字段即可切换整体成本/质量取向。
+active_profile: balanced
+
+routing:
+  # true：高风险或复杂任务可以偏离 profile，但必须在创建前公开原因。
+  # false：除用户显式指定或模型不可用外，严格使用 profile。
+  allow_task_override: true
+  unavailable_model: nearest_tier_then_inherit
+
+visibility:
+  announce_before_spawn: true
+  report_in_final: true
+  fields:
+    - task_id
+    - capability
+    - model
+    - reasoning_effort
+    - fork_turns
+    - route_reason
+
+# 这些是编排软边界，不是运行时保证的 token 上限。
+limits:
+  max_active_subagents: 3
+  max_total_subagents: 4
+  max_waves: 2
+
+context:
+  default_fork_turns: none
+  max_fork_turns: 3
+  allow_full_history: false
+
+profiles:
+  economy:
+    explorer:   { tier: fast,      model: gpt-6-luna,  reasoning_effort: low }
+    worker:     { tier: fast,      model: gpt-6-luna,  reasoning_effort: medium }
+    specialist: { tier: strongest, model: gpt-6-astra, reasoning_effort: high }
+    reviewer:   { tier: fast,      model: gpt-6-luna,  reasoning_effort: medium }
+    tester:     { tier: fast,      model: gpt-6-luna,  reasoning_effort: low }
+
+  balanced:
+    explorer:   { tier: fast,      model: gpt-6-luna,  reasoning_effort: low }
+    worker:     { tier: balanced,  model: gpt-6-sol,   reasoning_effort: medium }
+    specialist: { tier: strongest, model: gpt-6-astra, reasoning_effort: high }
+    reviewer:   { tier: balanced,  model: gpt-6-sol,   reasoning_effort: medium }
+    tester:     { tier: fast,      model: gpt-6-luna,  reasoning_effort: low }
+
+  quality:
+    explorer:   { tier: balanced,  model: gpt-6-sol,   reasoning_effort: medium }
+    worker:     { tier: strongest, model: gpt-6-astra, reasoning_effort: high }
+    specialist: { tier: strongest, model: gpt-6-astra, reasoning_effort: xhigh }
+    reviewer:   { tier: strongest, model: gpt-6-astra, reasoning_effort: high }
+    tester:     { tier: balanced,  model: gpt-6-sol,   reasoning_effort: medium }

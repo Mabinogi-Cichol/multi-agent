@@ -9,6 +9,7 @@ model_route:
   tier: fast | balanced | strongest
   model: 当前会话中的实际模型 ID，或 inherit
   reasoning_effort: low | medium | high | xhigh
+  source: profile | task_override | user_override | inherit
   reason: 一句话说明选择依据
 objective: 一个可观察的目标结果
 context:
@@ -31,5 +32,7 @@ budget:
 创建子 Agent 时，可以把模板写成简洁的自然语言或 YAML。必须明确说明该 Agent 是否允许修改文件，并要求其保留用户无关修改、按照结果协议返回。
 
 `model_route` 必须在创建子 Agent 前填写。`model` 应来自当前运行时实际提供的模型列表，不能凭记忆猜测；运行时不能覆盖模型时填写 `inherit`。
+
+`model_route.source` 记录路由来自当前配置、任务风险调整、用户指定还是运行时继承。它用于解释成本决策，不表示硬性 token 限额。
 
 合理的任务边界应遵循所有权和数据流。例如：先调查 API 契约，再实现生产者，最后在契约明确后更新依赖它的消费者。不要仅仅因为几个强耦合方法位于不同文件，就把它们拆成同时执行的任务。
