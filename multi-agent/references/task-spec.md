@@ -31,7 +31,7 @@ budget:
 
 创建子 Agent 时，可以把模板写成简洁的自然语言或 YAML。必须明确说明该 Agent 是否允许修改文件，并要求其保留用户无关修改、按照结果协议返回。
 
-`model_route` 必须在创建子 Agent 前填写。`model` 应来自当前运行时实际提供的模型列表，不能凭记忆猜测；运行时不能覆盖模型时填写 `inherit`。
+`model_route` 必须在创建子 Agent 前填写。`model` 应来自当前运行时实际提供的模型列表与 `routing.allowed_models` 的交集，不能凭记忆猜测；运行时不能覆盖模型时，只有确认主 Agent 模型处于允许范围内才填写 `inherit`，否则不创建子 Agent。
 
 `model_route.source` 记录路由来自当前配置、任务风险调整、用户指定还是运行时继承。它用于解释成本决策，不表示硬性 token 限额。
 
