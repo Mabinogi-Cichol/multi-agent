@@ -5,11 +5,19 @@ active_profile: balanced
 
 routing:
   # 所有 profile、任务升降档和不可用模型降级都只能使用这些模型。
-  allowed_models: [gpt-6-luna, gpt-6.1-sol]
-  # true：高风险或复杂任务可以偏离 profile，但必须在创建前公开原因。
+  allowed_models: [gpt-6-luna, gpt-6.1-terra, gpt-6.1-sol]
+  # true：按任务类型或风险调整 profile，但必须在创建前公开原因。
   # false：除用户显式指定或模型不可用外，严格使用 profile。
   allow_task_override: true
   unavailable_model: nearest_tier_then_inherit
+
+  # 任务覆盖在满足运行时可用性和风险下限时优先于 profile 默认值。
+  task_overrides:
+    - tasks: [visual_reasoning, computer_use]
+      roles: [explorer, worker, reviewer, tester]
+      model: gpt-6.1-terra
+      reasoning_effort: medium
+      max_risk: low
 
 visibility:
   announce_before_spawn: true
@@ -36,21 +44,21 @@ context:
 profiles:
   economy:
     explorer:   { tier: fast,      model: gpt-6-luna,    reasoning_effort: low }
-    worker:     { tier: fast,      model: gpt-6-luna,    reasoning_effort: medium }
+    worker:     { tier: balanced,  model: gpt-6.1-terra,  reasoning_effort: medium }
     specialist: { tier: strongest, model: gpt-6.1-sol,   reasoning_effort: high }
     reviewer:   { tier: fast,      model: gpt-6-luna,    reasoning_effort: medium }
     tester:     { tier: fast,      model: gpt-6-luna,    reasoning_effort: low }
 
   balanced:
     explorer:   { tier: fast,      model: gpt-6-luna,    reasoning_effort: low }
-    worker:     { tier: balanced,  model: gpt-6.1-sol,   reasoning_effort: medium }
+    worker:     { tier: balanced,  model: gpt-6.1-terra,  reasoning_effort: medium }
     specialist: { tier: strongest, model: gpt-6.1-sol,   reasoning_effort: high }
     reviewer:   { tier: balanced,  model: gpt-6.1-sol,   reasoning_effort: medium }
     tester:     { tier: fast,      model: gpt-6-luna,    reasoning_effort: low }
 
   quality:
-    explorer:   { tier: balanced,  model: gpt-6.1-sol,   reasoning_effort: medium }
+    explorer:   { tier: balanced,  model: gpt-6.1-terra,  reasoning_effort: medium }
     worker:     { tier: strongest, model: gpt-6.1-sol,   reasoning_effort: high }
     specialist: { tier: strongest, model: gpt-6.1-sol,   reasoning_effort: xhigh }
     reviewer:   { tier: strongest, model: gpt-6.1-sol,   reasoning_effort: high }
-    tester:     { tier: balanced,  model: gpt-6.1-sol,   reasoning_effort: medium }
+    tester:     { tier: balanced,  model: gpt-6.1-terra,  reasoning_effort: medium }

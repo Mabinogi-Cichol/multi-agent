@@ -14,7 +14,9 @@
 
 编辑 [`multi-agent/config/model-routing.yaml`](multi-agent/config/model-routing.yaml) 中的 `active_profile`，可在 `economy`、`balanced`（默认）和 `quality` 之间切换。该文件还定义各角色的模型与推理强度、并发数量、总 Agent 数、轮次和上下文传递范围。
 
-当前模型范围为 `gpt-6-luna` 和 `gpt-6.1-sol`，最高使用 GPT-6.1 Sol。`routing.allowed_models` 同时约束默认路由、自动升降档和降级；`balanced` 与 `strongest` 使用同一 Sol 模型，通过推理强度区分。
+当前模型范围为 `gpt-6-luna`、`gpt-6.1-terra` 和 `gpt-6.1-sol`，最高使用 GPT-6.1 Sol。`routing.allowed_models` 同时约束默认路由、自动升降档和降级。各 profile 使用 Luna 处理轻量任务、Terra 处理适合的普通任务，并使用 Sol 处理复杂任务和高风险审查；具体角色和推理强度以配置为准。
+
+`routing.task_overrides` 配置按任务类型选择的模型：当允许覆盖且运行时支持 Terra 时，低风险的视觉理解和界面操作任务可使用 Terra；风险下限仍由[路由策略](multi-agent/references/routing-policy.md)约束。
 
 创建子 Agent 前，技能会报告计划使用的模型、推理强度和任务边界。配置中的数量限制用于控制编排规模，不是精确的 token 上限；模型不可用时会按[路由策略](multi-agent/references/routing-policy.md)说明降级原因。
 
